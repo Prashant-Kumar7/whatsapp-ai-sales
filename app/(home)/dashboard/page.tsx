@@ -1,6 +1,6 @@
 export default function(){
     return (
-        <div>
+        <div className="w-full h-full">
             sales
         </div>
     )

@@ -1,4 +1,5 @@
 import { Appbar } from "@/components/ui/Appbar";
+import { Menu } from "@/components/ui/Menu";
 import { SidebarItem } from "@/components/ui/sidebarContent";
 
 export default function Layout({
@@ -11,13 +12,8 @@ export default function Layout({
         <div className="sticky top-0 z-500">
           <Appbar/>
         </div>
-        <div className="flex bg-slate-900">
-            <div className="w-72 border-r border-slate-600 min-h-[715px] mr-4 pt-28">
-              <div>
-                <SidebarItem href={"/upload"} title="Upload" icon= { <UploadIcon/> }/>
-                <SidebarItem href={"/sales"} title="Sales" icon= { <UploadIcon/> }/>
-              </div>
-            </div>
+        <div className="flex bg-slate-900 min-h-[715px]">
+            <Menu/>
           {children}
         </div>
       </div>
