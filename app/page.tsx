@@ -20,7 +20,7 @@ export default function Component() {
 
   return (
     <div className="min-h-screen bg-[#EDE8F5] text-[#3D52A0] font-['Poppins',sans-serif]">
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-[#3D52A0] shadow-md' : 'bg-transparent'}`}>
+      <header className={`sticky top-0 z-50 transition-all duration-300 bg-[#3D52A0] shadow-md`}>
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center py-6">
             <h1 className="text-2xl font-bold text-[#EDE8F5]">B2B WhatsApp AI Bot</h1>
