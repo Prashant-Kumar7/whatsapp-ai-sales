@@ -4,15 +4,15 @@
 import axios from "axios";
 import { FileInput, Label } from "flowbite-react";
 import { useState } from "react";
-import { getParsedData, getSignedURL } from "@/app/create/actions";
+import { deleteFile, getParsedData, getSignedURL } from "@/app/create/actions";
 
 export function Dropbox() {
 
   const [file , setFile] = useState<File | null >()
-
+  // const [uploadedFileId , setUploadedFileId] = useState<string | null>()
   function handleChange(e : React.ChangeEvent<HTMLInputElement>){
       if(!e.currentTarget.files){
-          return 
+          return
       }
       const file = e.currentTarget.files.item(0)
       if(file?.type === "text/csv"){
@@ -24,10 +24,14 @@ export function Dropbox() {
   }
 
   async function handleSubmit(){
+    console.log("submit was clicked!")
+    // setUploadedFileId(uuidv4())
+    const uploadedFileId = await uuidv4()
     if(!file){
       return
     }
-    const signedURLResult = await getSignedURL()
+
+    const signedURLResult = await getSignedURL(uploadedFileId)
     if (signedURLResult.failure !== undefined) {
       console.error(signedURLResult.failure)
       return
@@ -43,12 +47,21 @@ export function Dropbox() {
       body: file,
     })
 
+    await getParsedData(uploadedFileId)
+
+    await deleteFile(uploadedFileId)
   }
 
   async function handleGetFile(){
-    await getParsedData()
+    
 
     // console.log(file)
+  }
+
+  function uuidv4() {
+    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+      (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+    );
   }
 
   return (
