@@ -1,7 +1,8 @@
 
 # WhatsApp Ai sales
 
-A brief description of what this project does and who it's for
+
+This project is a WhatsApp-based chatbot solution designed for product sellers to engage with their customers efficiently. The chatbot automates customer communication by sending messages to users via WhatsApp, providing updates on products, order status, promotions, and personalized offers. It integrates with the seller's product catalog and customer database, allowing real-time responses to customer inquiries, sending reminders, and managing support queries. The goal is to enhance customer engagement, boost sales, and streamline communication with minimal manual intervention.
 
 
 ## Getting Started:
