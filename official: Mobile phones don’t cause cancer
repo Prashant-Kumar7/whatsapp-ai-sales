@@ -1,0 +1,77 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..cc8a989[m
+[1m--- /dev/null[m
+[1m+++ b/README.md[m
+[36m@@ -0,0 +1,71 @@[m
+[32m+[m
+[32m+[m[32m# WhatsApp Ai sales[m
+[32m+[m
+[32m+[m
+[32m+[m[32mThis project is a WhatsApp-based chatbot solution designed for product sellers to engage with their customers efficiently. The chatbot automates customer communication by sending messages to users via WhatsApp, providing updates on products, order status, promotions, and personalized offers. It integrates with the seller's product catalog and customer database, allowing real-time responses to customer inquiries, sending reminders, and managing support queries. The goal is to enhance customer engagement, boost sales, and streamline communication with minimal manual intervention.[m
+[32m+[m
+[32m+[m
+[32m+[m[32m## Getting Started:[m
+[32m+[m
+[32m+[m[32m### Setting up next-app locally[m
+[32m+[m
+[32m+[m[32mFirst clone the repository locally, by running the following command[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m```bash[m
+[32m+[m[32mgit clone https://github.com/codes30/whatsapp-ai-sales.git[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32mNext step, cd inside the repo. run the following[m
+[32m+[m
+[32m+[m[32m```bash[m
+[32m+[m[32mcd whatsapp-ai-sales/next-app[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m[32mNext, install all the dependency. run the following.[m
+[32m+[m[32mUsing ```npm``` to install the packages[m
+[32m+[m
+[32m+[m[32m```bash[m
+[32m+[m[32mnpm i[m
+[32m+[m[32m```[m
+[32m+[m[32mTo start the project locally in development mode, run.[m
+[32m+[m
+[32m+[m[32m```bash[m
+[32m+[m[32mnpm run dev[m
+[32m+[m[32m```[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m## Environment Variables[m
+[32m+[m
+[32m+[m[32mTo run this project, you will need to add the following environment variables to your .env file[m
+[32m+[m
+[32m+[m[32m`DATABASE_URL`[m
+[32m+[m
+[32m+[m[32m`NEXTAUTH_URL`[m
+[32m+[m
+[32m+[m[32m`NEXTAUTH_SECRET`[m
+[32m+[m
+[32m+[m[32m`AWS_REGION`[m
+[32m+[m
+[32m+[m[32m`AWS_ACCESS_KEY_ID`[m
+[32m+[m
+[32m+[m[32m`AWS_SECRET_ACCESS_KEY`[m
+[32m+[m
+[32m+[m[32m`AWS_S3_BUCKET_NAME`[m
+[32m+[m
+[32m+[m
+[32m+[m[32m## Appendix[m
+[32m+[m
+[32m+[m[32mAny additional information goes here[m
+[32m+[m
+[32m+[m[32m```AWS_ACCESS_KEY_ID``` and ```AWS_SECRET_ACCESS_KEY``` is generate from the IAM user[m
+[32m+[m
+[32m+[m[32mgive ```CORS``` permission to the local server where app is running.[m
+[32m+[m
+[32m+[m[32mAlso give ```Access``` permission to the IAM user by setting up ```polices```[m[41m [m
