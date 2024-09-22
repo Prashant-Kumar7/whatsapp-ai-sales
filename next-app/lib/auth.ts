@@ -35,9 +35,13 @@ export const NEXT_AUTH_CONFIG = {
             },
           });
 
-          if (user && (await compare(credentials.password, user.password))) {
+          if (
+            user &&
+            (await compare(credentials.password, user.password ?? ""))
+          ) {
             return {
               id: user.id,
+
               email: user.email,
               password: user.password,
             };
