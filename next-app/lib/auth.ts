@@ -31,7 +31,9 @@ export const NEXT_AUTH_CONFIG = {
             select: {
               id: true,
               email: true,
-              password: true,
+              name : true,
+              password : true,
+              image : true
             },
           });
 
@@ -41,9 +43,9 @@ export const NEXT_AUTH_CONFIG = {
           ) {
             return {
               id: user.id,
-
               email: user.email,
-              password: user.password,
+              name: user.name,
+              image : user.image
             };
           } else {
             console.log("error msg user doesnot exist");
@@ -71,6 +73,9 @@ export const NEXT_AUTH_CONFIG = {
 
         if (session.user) {
           session.user.id = user?.id;
+          session.user.name = user?.name;
+          session.user.email = user?.email;
+          session.user.image = user?.image
         }
       } catch (error) {
         return error;
