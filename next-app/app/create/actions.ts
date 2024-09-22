@@ -2,16 +2,17 @@
 
 import { NEXT_AUTH_CONFIG } from "@/lib/auth"
 import { getServerSession } from "next-auth"
-import { S3Client, PutObjectCommand, S3, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3, GetObjectCommand, DeleteObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import csv from 'csv-parser';
 import { Readable } from "stream";
+// import s3Client from "@/lib/s3Client"
 import prisma from "@/db";
 
 interface UserDataTypes { 
   name : string
-  email : string
-  userId : string
+  phoneno : string
+  projectId : string
 }
 
 
@@ -43,8 +44,7 @@ export async function getSignedURL(id : string) {
 }
 
 
-export async function getParsedData(id : string){
-  console.log(id)
+export async function getParsedData(id : string , projectId : string) : Promise< UserDataTypes[] | void >{
     const session = await getServerSession(NEXT_AUTH_CONFIG)
     const params = {Bucket : process.env.AWS_S3_BUCKET_NAME , Key : id}
     const command = new GetObjectCommand(params)
@@ -70,22 +70,28 @@ export async function getParsedData(id : string){
 
     const userData : UserDataTypes[] = []
     // Stream the CSV data and parse it using csv-parser
-    stream
+    await stream
       .pipe(csv())
       .on('data', (data) => results.push(data)) // Push each row to results array
       .on('end', () => {
         results.map((items : any)=>{
-            const Obj = { name : items.Name , email : items.Email , userId : session.user.id}
+            const Obj = { name : items.Name , phoneno : items.Phoneno , projectId : projectId}
             userData.push(Obj)
         })
 
         console.log(userData)
-        createData(userData)
+        // createData(userData)
+
+        // console.log(typeof(results[0].Phoneno))
+
       })
       .on('error', (err) => {
         console.error(err);
-        return
+        return err
     });
+
+        return userData
+
 }
 
 
@@ -102,10 +108,15 @@ export async function deleteFile(id:string) {
 
 }
 
-async function createData(data: UserDataTypes[]) {
+
+// for pushing users data to postgres Data Table
+export async function createData(data: UserDataTypes[] | void) {
+  if(!data){
+    return
+  }
   const res =  await prisma.data.createMany({
     data : data,
-    skipDuplicates: true, 
+    skipDuplicates: true,
   })
 
   console.log(res)
@@ -113,12 +124,44 @@ async function createData(data: UserDataTypes[]) {
 }
 
 
+// export async function downloadFileFromS3() {
+//   // get sample CSV file from S3 and make it downloadable
+//   try {
+    
+//     const command = new GetObjectCommand({
+//       Bucket: process.env.AWS_S3_BUCKET_NAME, // S3 bucket name
+//       Key: "sample-csv.csv", // S3 object key
+//     });
+
+
+//     const response = await s3Client.send(command);
+
+//     const bodyStream = response.Body as Readable;
+//     const chunks = [];
+
+//     for await (const chunk of bodyStream) {
+//       chunks.push(chunk);
+//     }
+
+//     const fileBuffer = Buffer.concat(chunks);
+    
+//     return {
+//       fileBuffer,
+//       contentType: response.ContentType,
+//       contentLength: response.ContentLength,
+//     };
+
+//   } catch (error) {
+//     console.error('Error downloading file:', error);
+//     throw new Error('File download failed');
+//   }
+
+
+
+// }
+
+
 
 function readableStreamToAsyncIterable(Body: ReadableStream<any> & import("@smithy/types").SdkStreamMixin): Iterable<any> | AsyncIterable<any> {
     throw new Error("Function not implemented.");
 }
-
-
-
-
-// fae17ac0-64b8-4208-b212-07a1e10f7589

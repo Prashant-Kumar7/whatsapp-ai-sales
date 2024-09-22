@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, File, X } from "lucide-react";
+import { deleteFile, getParsedData, getSignedURL, createData } from "@/app/create/actions";
+import { useParams } from 'next/navigation'
 
 export function Dropbox() {
   const [files, setFiles] = useState<File[]>([]);
+  const {projectId} = useParams<{ projectId: string; }>()
 
+  // console.log("this is the project id" ,projectId)
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles((prev) => [...prev, ...acceptedFiles]);
   }, []);
@@ -16,6 +20,46 @@ export function Dropbox() {
   const removeFile = (file: File) => {
     setFiles(files.filter((f) => f !== file));
   };
+
+
+  const handleUploading =  async(currentFile :File)=>{
+
+    const uploadedFileId = uuidv4()
+    const signedURLResult = await getSignedURL(uploadedFileId)
+    if (signedURLResult.failure !== undefined) {
+      console.error(signedURLResult.failure)
+      return
+    }
+
+
+    const { url } = signedURLResult.success
+
+    await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": currentFile.type,
+      },
+      body: currentFile,
+    })
+
+    if(currentFile.type === "text/csv"){
+      const data = await getParsedData(uploadedFileId , projectId)
+      console.log(data)
+      await createData(data)
+      await deleteFile(uploadedFileId)
+    }
+
+    if(currentFile.type === "application/pdf"){
+      // send request to python backend
+    }
+  }
+
+
+  const handleSubmit = async()=>{
+    files.map((file : File)=>{
+      handleUploading(file)
+    })
+  }
 
   return (
     <div className="w-full">
@@ -35,7 +79,7 @@ export function Dropbox() {
             : "Drag & drop files here, or click to select files"}
         </p>
         <p className="text-sm text-gray-400 mt-2">
-          Supported formats: PDF, DOCX, TXT, CSV
+          Supported formats: CSV
         </p>
       </div>
 
@@ -65,6 +109,14 @@ export function Dropbox() {
           </ul>
         </div>
       )}
+      <button onClick={handleSubmit} className={`rounded-lg p-2 text-lg bg-indigo-800 hover:bg-indigo-700 mt-6 ${files.length > 0 ? "" : "hidden"} `}>submit</button>
     </div>
+  );
+}
+
+
+function uuidv4() {
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+    (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
   );
 }

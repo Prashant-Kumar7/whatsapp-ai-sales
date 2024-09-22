@@ -33,7 +33,7 @@ model Client {
 
 model Data {
   id          String        @id @default(uuid())
-  phoneno     Int           
+  phoneno     String           
   name        String
   projectId   String
   project     Project          @relation(fields: [projectId] , references: [id])

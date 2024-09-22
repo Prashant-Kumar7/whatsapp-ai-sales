@@ -2,6 +2,8 @@ import { Dropbox } from "@/components/ui/dropBox";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { Upload, FileText, CheckCircle } from "lucide-react";
+import DownloadableFile from '@/components/ui/DownloadableContent'
+
 
 export default async function UploadPage() {
   const session = await getServerSession(NEXT_AUTH_CONFIG);
@@ -15,6 +17,15 @@ export default async function UploadPage() {
 
         <div className="mb-10 bg-slate-900 rounded-xl p-8 shadow-2xl border border-slate-700">
           <Dropbox />
+        </div>
+        <div className="flex justify-center">
+
+          <DownloadableFile
+            title="sample-csv.csv" 
+            fileSize="3.2 MB" 
+            downloadUrl={"https://csv-upload-22990.s3.ap-south-1.amazonaws.com/sample-csv.csv"} 
+            fileType="text/csv"
+          />
         </div>
 
         <div className="space-y-6 mt-10 bg-slate-900 rounded-xl p-8 shadow-xl border border-slate-700">

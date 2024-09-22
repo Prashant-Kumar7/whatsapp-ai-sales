@@ -114,7 +114,7 @@ export default function Dashboard() {
             Projects overview
             <div className="grid w-full mt-8 gap-8 grid-cols-1  lg:grid-cols-2 ">
               {projects.map((p) => (
-                <Link href={`/${p.id}/projectDashboard`}>
+                <Link href={`/${p.id}/dashboard`}>
                   <Card
                     key={p.id}
                     title={p.title}

@@ -35,7 +35,7 @@ export const Signin = () => {
     });
 
     if (!res?.error) {
-      route.push("/dashboard");
+      route.push("/projects");
     } else {
       setErr(true);
     }
