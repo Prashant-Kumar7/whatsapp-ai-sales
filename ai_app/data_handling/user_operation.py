@@ -1,10 +1,10 @@
 from fastapi import status
 from fastapi.responses import JSONResponse
 
-from CONSTANTS import CLIENT_DATA_COLLECTION as collection_name
-from database_layer.milvus_db import MilvusDB
-from llm_layer.llm_client import ClaudeLLM
-from service_layer.vector_db_service import query_document
+from ai_app.CONSTANTS import CLIENT_DATA_COLLECTION as collection_name
+from ai_app.database_layer.milvus_db import MilvusDB
+from ai_app.llm_layer.llm_client import ClaudeLLM
+from ai_app.service_layer.vector_db_service import query_document
 
 
 def generate_query_response(user_query: str, vector_db: MilvusDB, llm_client: ClaudeLLM):
@@ -28,16 +28,13 @@ def generate_query_response(user_query: str, vector_db: MilvusDB, llm_client: Cl
             query_results=formatted_query_results
         )
 
-        return JSONResponse(
-            status_code=status.HTTP_200_OK,
-            content=llm_response
-        )
+        # For general conversation with LLM, not restricted by any topic
+        # llm_response = llm_client.generate_conversational_response(user_query=user_query)
+
+        return llm_response
 
     except ValueError as v:
-        return JSONResponse(
-            status_code=status.HTTP_404_NOT_FOUND,
-            content=v
-        )
+        raise ValueError(v)
 
 def parse_query_results(query_results: list[dict]):
 

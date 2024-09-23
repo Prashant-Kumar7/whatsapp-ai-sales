@@ -1,18 +1,21 @@
 from typing import Optional, List
-from database_layer.milvus_db import MilvusDB
+from ai_app.database_layer.milvus_db import MilvusDB
 
 def add_document_to_db(collection_name:str, document: list[str], metadata : Optional[list[dict]],
                        vector_db: MilvusDB):
 
-    add_result: dict = vector_db.add_to_db(
-        collection_name=collection_name,
-        document=document,
-        metadata=metadata
-    )
+    try:
+        add_result: dict = vector_db.add_to_db(
+            collection_name=collection_name,
+            document=document,
+            metadata=metadata
+        )
+    except ValueError as v:
+        raise ValueError(v)
 
     try:
         if add_result.get('insert-count') == len(document):
-            print("Add Operation Sucessful")
+            print("Add Operation Successful")
     except Exception as e:
         print(f"Add Operation Successful, however Unexpected Error occurred "
               f"during verification.\nError Stack Trace\n{e}")

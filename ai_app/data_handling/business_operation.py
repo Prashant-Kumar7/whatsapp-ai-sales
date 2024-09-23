@@ -1,18 +1,19 @@
-from CONSTANTS import S3_URL, S3_KEY, CLIENT_DATA_COLLECTION as collection_name
 from fastapi import status
 from fastapi.responses import JSONResponse
-
-from database_layer.milvus_db import MilvusDB
-from llm_layer.chunk_text import chunk_extracted_text
 from PyPDF2 import PdfReader
-from service_layer.vector_db_service import add_document_to_db
+
+from ai_app.database_layer.milvus_db import MilvusDB
+from ai_app.llm_layer.chunk_text import chunk_extracted_text
+from ai_app.schemas.schema import BusinessURL
+from ai_app.service_layer.vector_db_service import add_document_to_db
+from ai_app.CONSTANTS import S3_URL, S3_KEY, CLIENT_DATA_COLLECTION as collection_name
 
 import io
-import os
+from requests import Response
 import requests
 
 
-def fetch_and_extract_client_data(vector_db: MilvusDB):
+def fetch_and_extract_client_data(business_url: BusinessURL, vector_db: MilvusDB):
     """
     This method aims to fetch and extract client data, by loading the keys from a set of CONSTANT's
     and using the key's value to fetch the desired client data. Upon successful retrieval, the data
@@ -20,27 +21,21 @@ def fetch_and_extract_client_data(vector_db: MilvusDB):
     :return: JSON Response regarding operation status
     """
 
-    if S3_URL in os.environ and S3_KEY:
-        s3_url = os.getenv(S3_URL)
-        file_name = os.getenv(S3_KEY)
-    else:
-        return JSONResponse(
-            status_code=status.HTTP_404_NOT_FOUND,
-            content="Client URL not found!"
-        )
+    pre_signed_url = business_url.fileUrl
+    file_key = business_url.fileKey
 
     try:
-        response = requests.get(s3_url)
+        response: Response = requests.get(pre_signed_url)
     except Exception as e:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content="Unable to Fetch Data from Client URL"
         )
 
-    # Extracting Text from Data Response
-    extracted_text = process_client_data(response)
 
     try:
+        # Extracting Text from Data Response
+        extracted_text = process_client_data(response)
 
         # Chunking Text and Preparing Data for Insertion
         chunked_text_list = chunk_extracted_text(text=extracted_text)
@@ -49,7 +44,7 @@ def fetch_and_extract_client_data(vector_db: MilvusDB):
         add_document_to_db(
             collection_name=collection_name,
             document=chunked_text_list,
-            metadata=[{"filename": f"{file_name}"}],
+            metadata=[{"file_key": f"{file_key}"}],
             vector_db=vector_db
         )
 
@@ -61,11 +56,11 @@ def fetch_and_extract_client_data(vector_db: MilvusDB):
 
     return JSONResponse(
         status_code=status.HTTP_200_OK,
-        content="Client Data Fetched and Added to Vector Database"
+        content=True
     )
 
 
-def process_client_data(response):
+def process_client_data(response: Response):
     try:
         pdf_file = io.BytesIO(response.content)
     except Exception as e:
