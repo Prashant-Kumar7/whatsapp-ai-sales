@@ -16,19 +16,20 @@ def generate_query_response(user_query: str, vector_db: MilvusDB, llm_client: Cl
         )
 
     try:
-        # query_results = query_document(
-        #     collection_name=collection_name,
-        #     user_query=user_query,
-        #     vector_db=vector_db
-        # )
-        #
-        # formatted_query_results = parse_query_results(query_results=query_results[0])
-        # llm_response = llm_client.generate_response(
-        #     user_query=user_query,
-        #     query_results=formatted_query_results
-        # )
+        query_results = query_document(
+            collection_name=collection_name,
+            user_query=user_query,
+            vector_db=vector_db
+        )
 
-        llm_response = llm_client.generate_conversational_response(user_query=user_query)
+        formatted_query_results = parse_query_results(query_results=query_results[0])
+        llm_response = llm_client.generate_response(
+            user_query=user_query,
+            query_results=formatted_query_results
+        )
+
+        # For general conversation with LLM, not restricted by any topic
+        # llm_response = llm_client.generate_conversational_response(user_query=user_query)
 
         return llm_response
 

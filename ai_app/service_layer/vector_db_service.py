@@ -1,5 +1,5 @@
 from typing import Optional, List
-from database_layer.milvus_db import MilvusDB
+from ai_app.database_layer.milvus_db import MilvusDB
 
 def add_document_to_db(collection_name:str, document: list[str], metadata : Optional[list[dict]],
                        vector_db: MilvusDB):

@@ -1,11 +1,11 @@
-from CONSTANTS import S3_URL, S3_KEY, CLIENT_DATA_COLLECTION as collection_name
+from ai_app.CONSTANTS import S3_URL, S3_KEY, CLIENT_DATA_COLLECTION as collection_name
 from fastapi import status
 from fastapi.responses import JSONResponse
 
-from database_layer.milvus_db import MilvusDB
-from llm_layer.chunk_text import chunk_extracted_text
+from ai_app.database_layer.milvus_db import MilvusDB
+from ai_app.llm_layer.chunk_text import chunk_extracted_text
 from PyPDF2 import PdfReader
-from service_layer.vector_db_service import add_document_to_db
+from ai_app.service_layer.vector_db_service import add_document_to_db
 
 import io
 import os
