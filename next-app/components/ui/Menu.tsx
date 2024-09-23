@@ -11,7 +11,7 @@ import { ElementType } from "react";
 import { LucideIcon } from "lucide-react";
 
 const menuItems = [
-  { href: "/projectDashboard", icon: HiChartPie, label: "Dashboard" },
+  { href: "/dashboard", icon: HiChartPie, label: "Dashboard" },
   { href: "/upload", icon: HiTable, label: "Upload" },
   { href: "/settings", icon: SettingsIconLucide, label: "Settings" },
 ];
