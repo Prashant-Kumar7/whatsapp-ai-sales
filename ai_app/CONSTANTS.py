@@ -1,0 +1,8 @@
+ANTHROPIC_API_KEY = "llm_api_key"
+S3_URL = "s3_item_url"
+S3_KEY = "s3_item_key"
+CLIENT_DATA_COLLECTION = "client_data_collection"
+TWILIO_ACCOUNT_SID = "account_sid"
+TWILIO_AUTH_TOKEN = "auth_token"
+USER_CONTACT = "user_contact"
+CLIENT_CONTACT = "client_contact"

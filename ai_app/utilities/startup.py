@@ -3,8 +3,8 @@ import threading
 import os
 from dotenv import load_dotenv
 
-from database_layer.milvus_db import MilvusDB
-from llm_layer.llm_client import ClaudeLLM
+from ai_app.database_layer.milvus_db import MilvusDB
+from ai_app.llm_layer.llm_client import ClaudeLLM
 
 
 class SetUpUtilities(object):

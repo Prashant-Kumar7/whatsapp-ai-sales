@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from router.user_router import router as service_router
 from router.business_router import router as business_router
+from router.user_router import router as service_router
+from router.twilio_router import router as twilio_router
 from utilities.startup import startup_utilities
 
 import uvicorn
@@ -10,6 +11,7 @@ import uvicorn
 app = FastAPI()
 app.include_router(router=service_router)
 app.include_router(router=business_router)
+app.include_router(router=twilio_router)
 
 app.add_middleware(
     CORSMiddleware,
