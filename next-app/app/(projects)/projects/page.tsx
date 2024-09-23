@@ -45,8 +45,9 @@ export default function Dashboard() {
     try {
       const newProjects = projects.filter((p) => p.id !== id);
       setProjects(newProjects);
-      const res = await axios.delete(`/api/projects/deleteProject/${id}`);
-      setProjects(res.data.projects);
+      const res = await axios.post(`/api/projects/deleteProject`, {
+        projectId: id,
+      });
     } catch (e) {
       console.log("error while deleting project", e);
     }

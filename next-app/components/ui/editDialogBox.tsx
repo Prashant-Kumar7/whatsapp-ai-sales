@@ -29,7 +29,16 @@ export function EditDialogDemo({
   const router = useRouter();
 
   const handleEdit = async (id: string) => {
-    console.log(id);
+    try {
+      await axios.post("/api/projects/editProject", {
+        projectId: id,
+        projectName: projectName,
+        projectDescription: projectDescription,
+      });
+      window.location.reload();
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <Dialog>
