@@ -1,4 +1,5 @@
 from pydantic import BaseModel
 
-class Query(BaseModel):
-    query: str
+class BusinessURL(BaseModel):
+    fileUrl: str
+    fileKey: str
