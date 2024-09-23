@@ -10,43 +10,44 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, PlusIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function DialogDemo({}) {
-  const [projectName, setProjectName] = useState("");
-  const [projectDescription, setProjectDescription] = useState("");
+export function EditDialogDemo({
+  projectId,
+  title,
+  description,
+}: {
+  projectId: string;
+  title: string;
+  description: string;
+}) {
+  const [projectName, setProjectName] = useState(title);
+  const [projectDescription, setProjectDescription] = useState(description);
   const router = useRouter();
-  const handleAddProject = async () => {
-    try {
-      const res = await axios.post("/api/projects/createProject", {
-        projectName,
-        projectDescription,
-      });
-      console.log(res.data.message);
-    } catch (e) {
-      console.error("error while creating project", e);
-    } finally {
-      window.location.reload();
-    }
+
+  const handleEdit = async (id: string) => {
+    console.log(id);
   };
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold py-4 px-6 rounded-2xl text-lg transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center">
-          <PlusIcon className="w-6 h-6 mr-2" />
-          Create New Project
+        <button
+          onClick={(e) => {}}
+          className="flex items-center p-2 text-white rounded-full transition-colors"
+        >
+          <PencilIcon className="h-6 w-6 text-primary-500 font-extrabold text-2xl hover:text-primary-600 hover:scale-110" />
         </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] bg-white rounded-2xl shadow-2xl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-primary-600 mb-2">
-            Create New Project
+            Edit Project
           </DialogTitle>
           <DialogDescription className="text-gray-600">
-            Enter the details of your new project. We'll take care of the rest.
+            Enter the new details of your project. We'll take care of the rest.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4">
@@ -85,13 +86,13 @@ export function DialogDemo({}) {
         <DialogFooter>
           <Button
             onClick={() => {
-              handleAddProject();
+              handleEdit(projectId);
               router.push("/projects");
             }}
             type="submit"
             className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
           >
-            Create Project
+            Edit Project
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -8,11 +8,14 @@ import {
   BriefcaseIcon,
   MapPinIcon,
   PhoneIcon,
+  PencilIcon,
+  TrashIcon,
 } from "@heroicons/react/24/solid";
 import { DialogDemo } from "@/components/ui/dialogBox";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { EditDialogDemo } from "@/components/ui/editDialogBox";
 
 interface projectinterface {
   id: string;
@@ -37,6 +40,17 @@ export default function Dashboard() {
     const res = await axios.get("/api/projects/getProjects");
     setProjects(res.data.projects);
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const newProjects = projects.filter((p) => p.id !== id);
+      setProjects(newProjects);
+      const res = await axios.delete(`/api/projects/deleteProject/${id}`);
+      setProjects(res.data.projects);
+    } catch (e) {
+      console.log("error while deleting project", e);
+    }
+  };
   useEffect(() => {
     getProjects();
   }, []);
@@ -59,9 +73,9 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row justify-between ">
-          <div className="max-w-screen">
-            <div className="bg-white shadow-2xl rounded-3xl overflow-hidden">
-              <div className="px-6 py-12">
+          <div className="w-full lg:w-1/4">
+            <div className="bg-white shadow-2xl rounded-3xl overflow-hidden w-full">
+              <div className="px-10 py-12">
                 <div className="flex flex-col items-center mb-8">
                   {session?.user?.image ? (
                     <Image
@@ -110,17 +124,44 @@ export default function Dashboard() {
               <DialogDemo />
             </div>
           </div>
-          <div className="text-primary-600 text-4xl font-bold  lg:w-3/4 mt-10 lg:mt-0 lg:ml-10">
+          <div className="text-primary-600 text-4xl font-bold w-full mt-10 lg:mt-0 lg:ml-10">
             Projects overview
-            <div className="grid w-full mt-8 gap-8 grid-cols-1  lg:grid-cols-2 ">
+            <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-3 gap-6 mt-8">
               {projects.map((p) => (
-                <Link href={`/${p.id}/dashboard`}>
+                <Link href={`/${p.id}/dashboard`} key={p.id}>
                   <Card
-                    key={p.id}
                     title={p.title}
-                    className="text-black w-full sm:w-[calc(50%-8px)]"
+                    className="h-full text-black shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col"
                   >
-                    <div className="text-lg">{p.description}</div>
+                    <CardContent className="p-6 bg-white flex-grow">
+                      <div className="text-sm text-gray-600">
+                        {p.description}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-6 p-4 mt-auto">
+                      <div
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                      >
+                        <EditDialogDemo
+                          projectId={p.id}
+                          title={p.title}
+                          description={p.description}
+                        />
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDelete(p.id);
+                        }}
+                        className="flex items-center p-2 text-white rounded-full transition-colors"
+                      >
+                        <TrashIcon className="h-6 w-6 text-red-600 hover:text-red-700 hover:scale-110" />
+                      </button>
+                    </CardFooter>
                   </Card>
                 </Link>
               ))}

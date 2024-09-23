@@ -3,13 +3,19 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, File, X } from "lucide-react";
-import { deleteFile, getParsedData, getSignedURL, createData, getPublicUrl } from "@/app/create/actions";
-import { useParams } from 'next/navigation'
+import {
+  deleteFile,
+  getParsedData,
+  getSignedURL,
+  createData,
+  getPublicUrl,
+} from "@/app/create/actions";
+import { useParams } from "next/navigation";
 import axios from "axios";
 
 export function Dropbox() {
   const [files, setFiles] = useState<File[]>([]);
-  const {projectId} = useParams<{ projectId: string; }>()
+  const { projectId } = useParams<{ projectId: string }>();
 
   // console.log("this is the project id" ,projectId)
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -22,18 +28,15 @@ export function Dropbox() {
     setFiles(files.filter((f) => f !== file));
   };
 
-
-  const handleUploading =  async(currentFile :File)=>{
-
-    const uploadedFileId = uuidv4()
-    const signedURLResult = await getSignedURL(uploadedFileId)
+  const handleUploading = async (currentFile: File) => {
+    const uploadedFileId = uuidv4();
+    const signedURLResult = await getSignedURL(uploadedFileId);
     if (signedURLResult.failure !== undefined) {
-      console.error(signedURLResult.failure)
-      return
+      console.error(signedURLResult.failure);
+      return;
     }
 
-
-    const { url } = signedURLResult.success
+    const { url } = signedURLResult.success;
 
     await fetch(url, {
       method: "PUT",
@@ -41,39 +44,42 @@ export function Dropbox() {
         "Content-Type": currentFile.type,
       },
       body: currentFile,
-    })
+    });
 
-    if(currentFile.type === "text/csv"){
-      const data = await getParsedData(uploadedFileId , projectId)
-      console.log(data)
-      await createData(data)
-      await deleteFile(uploadedFileId)
+    if (currentFile.type === "text/csv") {
+      const data = await getParsedData(uploadedFileId, projectId);
+      console.log(data);
+      await createData(data);
+      await deleteFile(uploadedFileId);
     }
 
-    if(currentFile.type === "application/pdf"){
+    if (currentFile.type === "application/pdf") {
       // send request to python backend
       const url = await getPublicUrl(uploadedFileId);
-      console.log(url)
-      const response = await axios.post('https://19f8-49-36-187-204.ngrok-free.app/client/fetch-data-test', {fileUrl : url}, {
-        headers: {
-          'accept': 'application/json',
-          'Content-Type': 'application/json'
+      console.log(url);
+      const response = await axios.post(
+        "https://19f8-49-36-187-204.ngrok-free.app/client/fetch-data-test",
+        { fileUrl: url },
+        {
+          headers: {
+            accept: "application/json",
+            "Content-Type": "application/json",
+          },
         }
-      })
-      if(response.data.status){
-        await deleteFile(uploadedFileId)
+      );
+      if (response.data.status) {
+        await deleteFile(uploadedFileId);
       } else {
-        console.error("pdf data was not extracted")
+        console.error("pdf data was not extracted");
       }
     }
-  }
+  };
 
-
-  const handleSubmit = async()=>{
-    files.map((file : File)=>{
-      handleUploading(file)
-    })
-  }
+  const handleSubmit = async () => {
+    files.map((file: File) => {
+      handleUploading(file);
+    });
+  };
 
   return (
     <div className="w-full">
@@ -92,9 +98,7 @@ export function Dropbox() {
             ? "Drop the files here"
             : "Drag & drop files here, or click to select files"}
         </p>
-        <p className="text-sm text-gray-400 mt-2">
-          Supported formats: CSV
-        </p>
+        <p className="text-sm text-gray-400 mt-2">Supported formats: CSV</p>
       </div>
 
       {files.length > 0 && (
@@ -123,14 +127,23 @@ export function Dropbox() {
           </ul>
         </div>
       )}
-      <button onClick={handleSubmit} className={`rounded-lg p-2 text-lg bg-indigo-800 hover:bg-indigo-700 mt-6 ${files.length > 0 ? "" : "hidden"} `}>submit</button>
+      <button
+        onClick={handleSubmit}
+        className={`rounded-lg px-4 py-2 text-lg bg-primary-800 hover:bg-primary-700 mt-6 ${
+          files.length > 0 ? "" : "hidden"
+        } `}
+      >
+        Submit
+      </button>
     </div>
   );
 }
 
-
 function uuidv4() {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-    (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
+    (
+      +c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))
+    ).toString(16)
   );
 }
