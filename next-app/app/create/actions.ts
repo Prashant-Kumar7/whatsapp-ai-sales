@@ -160,6 +160,10 @@ export async function createData(data: UserDataTypes[] | void) {
 
 // }
 
+export const getPublicUrl = (key : string) => {
+  return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+};
+
 
 
 function readableStreamToAsyncIterable(Body: ReadableStream<any> & import("@smithy/types").SdkStreamMixin): Iterable<any> | AsyncIterable<any> {

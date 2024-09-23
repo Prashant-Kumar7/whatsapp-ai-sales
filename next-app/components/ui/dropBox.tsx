@@ -3,8 +3,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { Upload, File, X } from "lucide-react";
-import { deleteFile, getParsedData, getSignedURL, createData } from "@/app/create/actions";
+import { deleteFile, getParsedData, getSignedURL, createData, getPublicUrl } from "@/app/create/actions";
 import { useParams } from 'next/navigation'
+import axios from "axios";
 
 export function Dropbox() {
   const [files, setFiles] = useState<File[]>([]);
@@ -51,6 +52,14 @@ export function Dropbox() {
 
     if(currentFile.type === "application/pdf"){
       // send request to python backend
+      const url = await getPublicUrl(uploadedFileId);
+      // console.log(url)
+      const response = await axios.post("endpoint" , {fileUrl : url})
+      if(response.data.status){
+        await deleteFile(uploadedFileId)
+      } else {
+        console.error("pdf data was not extracted")
+      }
     }
   }
 
