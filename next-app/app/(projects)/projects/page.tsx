@@ -16,6 +16,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { EditDialogDemo } from "@/components/ui/editDialogBox";
+import { DeleteDeleteDialogBox } from "@/components/ui/deleteDialogBox";
 
 interface projectinterface {
   id: string;
@@ -41,17 +42,6 @@ export default function Dashboard() {
     setProjects(res.data.projects);
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      const newProjects = projects.filter((p) => p.id !== id);
-      setProjects(newProjects);
-      const res = await axios.post(`/api/projects/deleteProject`, {
-        projectId: id,
-      });
-    } catch (e) {
-      console.log("error while deleting project", e);
-    }
-  };
   useEffect(() => {
     getProjects();
   }, []);
@@ -152,16 +142,14 @@ export default function Dashboard() {
                           description={p.description}
                         />
                       </div>
-                      <button
+                      <div
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          handleDelete(p.id);
                         }}
-                        className="flex items-center p-2 text-white rounded-full transition-colors"
                       >
-                        <TrashIcon className="h-6 w-6 text-red-600 hover:text-red-700 hover:scale-110" />
-                      </button>
+                        <DeleteDeleteDialogBox projectId={p.id} />
+                      </div>
                     </CardFooter>
                   </Card>
                 </Link>
