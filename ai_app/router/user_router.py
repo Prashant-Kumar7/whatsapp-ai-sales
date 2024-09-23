@@ -20,8 +20,6 @@ async def get_query_response(request: Request,
         form = await request.form()
         user_query = form.get('Body')
 
-        print(f"Printing User Text: \n{user_query}")
-
     except Exception as e:
         print(f"Unable to extract user message from request\n.Error Stack Trace:\n{e}")
         return JSONResponse(
