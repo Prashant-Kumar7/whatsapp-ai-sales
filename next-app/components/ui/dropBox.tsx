@@ -53,8 +53,13 @@ export function Dropbox() {
     if(currentFile.type === "application/pdf"){
       // send request to python backend
       const url = await getPublicUrl(uploadedFileId);
-      // console.log(url)
-      const response = await axios.post("endpoint" , {fileUrl : url})
+      console.log(url)
+      const response = await axios.post('https://19f8-49-36-187-204.ngrok-free.app/client/fetch-data-test', {fileUrl : url}, {
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
       if(response.data.status){
         await deleteFile(uploadedFileId)
       } else {
