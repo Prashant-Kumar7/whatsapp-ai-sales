@@ -37,6 +37,11 @@ const config: Config = {
         },
         background: "#f8fafc",
         foreground: "#0f172a",
+        backgroundImage: {
+          "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+          "gradient-conic":
+            "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        },
       },
     },
   },

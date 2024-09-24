@@ -14,8 +14,13 @@ import {
   Lock,
   Menu,
   X,
+  ChevronRight,
+  Github,
+  Twitter,
+  Linkedin,
 } from "lucide-react";
 import { signIn } from "next-auth/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,15 +55,15 @@ export default function Component() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 font-['Inter', sans-serif] transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
       <header
-        className={`sticky top-0 z-50 transition-all duration-300 bg-white dark:bg-gray-900 bg-opacity-80 dark:bg-opacity-80 backdrop-blur-md ${
+        className={`fixed w-full top-0 z-50 transition-all duration-300 bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg ${
           isScrolled ? "py-3 shadow-md" : "py-5"
         }`}
       >
         <div className="container mx-auto px-6">
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-indigo-700 dark:text-indigo-400">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-teal-600 dark:from-cyan-400 dark:to-teal-500">
               B2B WhatsApp AI Bot
             </h1>
             <nav className="hidden md:flex items-center space-x-8">
@@ -68,14 +73,14 @@ export default function Component() {
                     {item.href ? (
                       <a
                         href={item.href}
-                        className="text-gray-600 dark:text-gray-300 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors"
+                        className="text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
                       >
                         {item.label}
                       </a>
                     ) : (
                       <button
                         onClick={item.onClick}
-                        className="text-gray-600 dark:text-gray-300 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors"
+                        className="text-gray-700 dark:text-gray-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
                       >
                         {item.label}
                       </button>
@@ -85,13 +90,13 @@ export default function Component() {
               </ul>
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+                className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 transition-colors duration-300 hover:bg-gray-200 dark:hover:bg-gray-700"
               >
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
               </button>
             </nav>
             <button
-              className="md:hidden text-gray-600 dark:text-gray-300"
+              className="md:hidden text-gray-700 dark:text-gray-300"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -102,16 +107,35 @@ export default function Component() {
       </header>
 
       {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 p-6">
-          <nav>
-            <ul className="space-y-4">
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed inset-0 z-40 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg"
+          >
+            <div className="flex justify-end p-6">
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="text-gray-700 dark:text-gray-300"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <nav className="flex flex-col items-center space-y-8 p-6">
               {navItems.map((item, index) => (
-                <li key={index}>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="block py-2 text-gray-600 dark:text-gray-300 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors"
+                      className="text-2xl font-semibold text-gray-800 dark:text-gray-200 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.label}
@@ -122,37 +146,56 @@ export default function Component() {
                         item.onClick?.();
                         setIsMenuOpen(false);
                       }}
-                      className="block w-full text-left py-2 text-gray-600 dark:text-gray-300 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors"
+                      className="text-2xl font-semibold text-gray-800 dark:text-gray-200 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
                     >
                       {item.label}
                     </button>
                   )}
-                </li>
+                </motion.div>
               ))}
-            </ul>
-          </nav>
-        </div>
-      )}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <main>
-        <section className="text-center py-32">
-          <div className="container mx-auto px-6">
-            <h2 className="text-5xl font-extrabold mb-6 text-indigo-900 dark:text-indigo-300 leading-tight">
+        <section className="relative text-center py-32 mt-16 overflow-hidden">
+          <div className="container mx-auto px-6 relative z-10">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-400 dark:to-teal-400 leading-tight"
+            >
               Revolutionize Your B2B Sales
-            </h2>
-            <p className="text-xl mb-10 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-xl mb-10 text-gray-700 dark:text-gray-300 max-w-2xl mx-auto"
+            >
               Harness the power of AI-driven communication for unparalleled
-              efficiency.
-            </p>
-            <Button className="bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-              Explore the Future
-            </Button>
+              efficiency and growth.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              <Button className="bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-500 dark:to-teal-500 hover:from-cyan-700 hover:to-teal-700 dark:hover:from-cyan-600 dark:hover:to-teal-600 text-white font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                Explore the Future
+                <ChevronRight className="ml-2" />
+              </Button>
+            </motion.div>
           </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-teal-600 opacity-10 dark:opacity-20" />
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
         </section>
 
         <section id="features" className="py-24 bg-white dark:bg-gray-800">
           <div className="container mx-auto px-6">
-            <h3 className="text-3xl font-bold mb-16 text-center text-indigo-900 dark:text-indigo-300">
+            <h3 className="text-3xl font-bold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-400 dark:to-teal-400">
               Enterprise-Grade Features
             </h3>
             <div className="grid md:grid-cols-3 gap-12">
@@ -175,26 +218,29 @@ export default function Component() {
                   description: "Easily connect with your existing B2B systems.",
                 },
               ].map((feature, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="bg-gray-50 dark:bg-gray-700 rounded-xl p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  className="bg-gray-100 dark:bg-gray-800 rounded-xl p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                 >
-                  <feature.icon className="w-12 h-12 mb-6 text-indigo-600 dark:text-indigo-400" />
-                  <h4 className="text-xl font-semibold mb-4 text-indigo-800 dark:text-indigo-200">
+                  <feature.icon className="w-12 h-12 mb-6 text-cyan-600 dark:text-cyan-400" />
+                  <h4 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
                     {feature.title}
                   </h4>
                   <p className="text-gray-600 dark:text-gray-300">
                     {feature.description}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="benefits" className="py-24 bg-indigo-50 dark:bg-gray-900">
+        <section id="benefits" className="py-24 bg-gray-50 dark:bg-gray-900">
           <div className="container mx-auto px-6">
-            <h3 className="text-3xl font-bold mb-16 text-center text-indigo-900 dark:text-indigo-300">
+            <h3 className="text-3xl font-bold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-400 dark:to-teal-400">
               B2B Benefits
             </h3>
             <div className="grid md:grid-cols-2 gap-12">
@@ -224,20 +270,23 @@ export default function Component() {
                     "Increase sales with timely and relevant customer interactions.",
                 },
               ].map((benefit, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="flex items-start bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg"
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  className="flex items-start bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
-                  <benefit.icon className="w-10 h-10 mr-6 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+                  <benefit.icon className="w-10 h-10 mr-6 text-cyan-600 dark:text-cyan-400 flex-shrink-0" />
                   <div>
-                    <h4 className="text-xl font-semibold mb-4 text-indigo-800 dark:text-indigo-200">
+                    <h4 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
                       {benefit.title}
                     </h4>
                     <p className="text-gray-600 dark:text-gray-300">
                       {benefit.description}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -245,31 +294,46 @@ export default function Component() {
 
         <section
           id="cta"
-          className="py-24 bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-900 dark:to-purple-900 text-white"
+          className="py-24 bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-900 dark:to-teal-900 text-white"
         >
           <div className="container mx-auto px-6 text-center">
-            <h3 className="text-4xl font-bold mb-6">
+            <motion.h3
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl font-bold mb-6"
+            >
               Ready to Transform Your B2B Sales Process?
-            </h3>
-            <p className="mb-10 text-xl max-w-2xl mx-auto opacity-90">
+            </motion.h3>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-10 text-xl max-w-2xl mx-auto opacity-90"
+            >
               Experience the power of AI-driven communication. Request a demo
               today.
-            </p>
-            <form className="max-w-md mx-auto space-y-4">
+            </motion.p>
+            <motion.form
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="max-w-md mx-auto space-y-4"
+            >
               <Input
                 type="text"
                 placeholder="Company Name"
-                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500"
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-full focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-500"
               />
               <Input
                 type="email"
                 placeholder="Business Email"
-                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-lg focus:ring-2 focus:ring-indigo-400 dark:focus:ring-indigo-500"
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-full focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-500"
               />
-              <Button className="w-full bg-white dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700 font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <Button className="w-full bg-white dark:bg-gray-800 text-cyan-600 dark:text-cyan-400 hover:bg-gray-100 dark:hover:bg-gray-700 font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Request Demo
               </Button>
-            </form>
+            </motion.form>
           </div>
         </section>
       </main>
@@ -300,7 +364,7 @@ export default function Component() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#features"
                     className="hover:text-white dark:hover:text-gray-300 transition-colors"
                   >
                     Features
@@ -308,7 +372,7 @@ export default function Component() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#benefits"
                     className="hover:text-white dark:hover:text-gray-300 transition-colors"
                   >
                     Benefits
@@ -316,7 +380,7 @@ export default function Component() {
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="#contact"
                     className="hover:text-white dark:hover:text-gray-300 transition-colors"
                   >
                     Contact
@@ -335,6 +399,26 @@ export default function Component() {
               <h4 className="text-white dark:text-gray-300 font-semibold mb-4">
                 Follow Us
               </h4>
+              <div className="flex space-x-4">
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <Twitter size={20} />
+                </a>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <Linkedin size={20} />
+                </a>
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <Github size={20} />
+                </a>
+              </div>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 dark:border-gray-700 text-center">
