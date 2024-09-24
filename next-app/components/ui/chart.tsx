@@ -1,23 +1,65 @@
+"use client";
 import React from "react";
+import { Line, Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 interface ChartProps {
   type: "line" | "bar";
-  data: number[];
-  labels: string[];
+  data: {
+    labels: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      backgroundColor?: string | string[];
+      borderColor?: string | string[];
+      borderWidth?: number;
+      fill?: boolean;
+    }[];
+  };
 }
 
-export const Chart: React.FC<ChartProps> = ({ type, data, labels }) => {
-  // This is a placeholder. In a real application, you'd use a charting library.
+export const Chart: React.FC<ChartProps> = ({ type, data }) => {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: `${type.charAt(0).toUpperCase() + type.slice(1)} Chart`,
+      },
+    },
+  };
+
   return (
-    <div className="bg-gray-100 p-4 rounded-lg">
-      <p>{type.charAt(0).toUpperCase() + type.slice(1)} Chart</p>
-      <ul>
-        {data.map((value, index) => (
-          <li key={index}>
-            {labels[index]}: {value}
-          </li>
-        ))}
-      </ul>
+    <div className="bg-black-100 p-4 rounded-lg">
+      {type === "line" ? (
+        <Line data={data} options={options} />
+      ) : (
+        <Bar data={data} options={options} />
+      )}
     </div>
   );
 };

@@ -16,8 +16,8 @@ const menuItems = [
   { href: "/settings", icon: SettingsIconLucide, label: "Settings" },
 ];
 
-export function Menu() {
-  const pathname = usePathname();
+export function Menu({ projectId }: { projectId: string }) {
+  const pathName = usePathname();
 
   return (
     <Sidebar aria-label="Application sidebar" className="h-screen">
@@ -27,8 +27,9 @@ export function Menu() {
             <SidebarItem
               key={item.href}
               {...item}
+              projectId={projectId}
               icon={item.icon as any}
-              active={pathname === item.href}
+              active={pathName === item.href}
             />
           ))}
         </Sidebar.ItemGroup>
@@ -41,14 +42,16 @@ const SidebarItem = ({
   href,
   icon: Icon,
   label,
+  projectId,
   active,
 }: {
   href: string;
   icon: IconType;
   label: string;
+  projectId: string;
   active: boolean;
 }) => (
-  <Link href={href} passHref>
+  <Link href={`/${projectId}/${href}`} passHref>
     <Sidebar.Item
       as="div"
       icon={Icon}

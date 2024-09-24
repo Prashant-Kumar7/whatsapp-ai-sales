@@ -2,6 +2,7 @@ import { Dropbox } from "@/components/ui/dropBox";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { Upload, FileText, CheckCircle } from "lucide-react";
+import DownloadableFile from "@/components/ui/DownloadableContent";
 
 export default async function UploadPage() {
   const session = await getServerSession(NEXT_AUTH_CONFIG);
@@ -17,27 +18,40 @@ export default async function UploadPage() {
           <Dropbox />
         </div>
 
-        <div className="space-y-6 mt-10 bg-slate-900 rounded-xl p-8 shadow-xl border border-slate-700">
-          <h2 className="text-2xl font-semibold text-primary-500 mb-6">
-            Upload Process
-          </h2>
-          <UploadStep
-            icon={<Upload className="text-secondary-500" />}
-            title="Select Files"
-            description="Choose the files you want to upload or drag and drop them here."
-          />
-          <UploadStep
-            icon={<FileText className="text-secondary-500" />}
-            title="Process Files"
-            description="Our system will automatically process and analyze your files."
-          />
-          <UploadStep
-            icon={<CheckCircle className="text-secondary-500" />}
-            title="Complete"
-            description="Your files are now ready for use in the B2B WhatsApp AI Bot."
-          />
+        <div className="flex flex-col lg:flex-row space-y-6 lg:space-x-8">
+          <div className="w-1/2space-y-6 mt-10 bg-slate-900 rounded-xl p-8 shadow-xl border border-slate-700">
+            <h2 className="text-2xl font-semibold text-primary-500 mb-6">
+              Upload Process
+            </h2>
+            <UploadStep
+              icon={<Upload className="text-secondary-500" />}
+              title="Select Files"
+              description="Choose the files you want to upload or drag and drop them here.You can upload pdf's and csv's .The pdf's will contain the data related to your products and business for our context.
+            The csv's will contain the data related to your customers.You can download the sample csv from below given card.
+          "
+            />
+            <div className="flex justify-center items-center  my-4">
+              <DownloadableFile
+                title="sample-csv.csv"
+                fileSize="3.2 MB"
+                downloadUrl={
+                  "https://csv-upload-22990.s3.ap-south-1.amazonaws.com/sample-csv.csv"
+                }
+                fileType="text/csv"
+              />
+            </div>
+            <UploadStep
+              icon={<FileText className="text-secondary-500" />}
+              title="Process Files"
+              description="Our system will automatically process and analyze your files."
+            />
+            <UploadStep
+              icon={<CheckCircle className="text-secondary-500" />}
+              title="Complete"
+              description="Your files are now ready for use in the B2B WhatsApp AI Bot."
+            />
+          </div>
         </div>
-
         {session && (
           <div className="mt-10 p-6 bg-slate-900 rounded-xl shadow-xl border border-slate-700">
             <h2 className="text-xl font-semibold text-primary-500 mb-4">
