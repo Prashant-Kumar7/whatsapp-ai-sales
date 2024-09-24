@@ -208,3 +208,37 @@ export async function getUserDetails() {
     return { failure: "Error fetching user details" };
   }
 }
+
+export async function editUserDetails({
+  fullName,
+  companyName,
+  phoneNumber,
+  address,
+}: {
+  fullName: string;
+  companyName: string;
+  phoneNumber: string;
+  address: string;
+}) {
+  try {
+    const session = await getServerSession(NEXT_AUTH_CONFIG);
+    if (!session) {
+      return { failure: "not authenticated" };
+    }
+    const user = await prisma.client.update({
+      where: {
+        id: session.user.id,
+      },
+      data: {
+        name: fullName,
+        companyName,
+        address,
+        phone: phoneNumber,
+      },
+    });
+    return { success: { user } };
+  } catch (error) {
+    console.error(error);
+    return { failure: "Error fetching user details" };
+  }
+}

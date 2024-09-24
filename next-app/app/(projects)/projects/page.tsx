@@ -18,6 +18,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { EditDialogDemo } from "@/components/ui/editDialogBox";
 import { DeleteDeleteDialogBox } from "@/components/ui/deleteDialogBox";
 import { getProjects, getUserDetails } from "@/app/create/actions";
+import { ProfileDialogDemo } from "@/components/ui/profileDialogBox";
 
 interface projectinterface {
   id: string;
@@ -76,6 +77,9 @@ export default function Dashboard() {
           <div className="w-full lg:w-1/4">
             <div className="bg-white shadow-2xl rounded-3xl overflow-hidden w-full">
               <div className="px-10 py-12">
+                <div className="flex justify-end">
+                  <ProfileDialogDemo profileId={userDetails.id} />
+                </div>
                 <div className="flex flex-col items-center mb-8">
                   {session?.user?.image ? (
                     <Image
@@ -91,7 +95,7 @@ export default function Dashboard() {
                     </div>
                   )}
                   <h2 className="mt-4 text-3xl font-bold text-gray-800">
-                    {session?.user?.name}
+                    {session?.user?.name || "Guest"}
                   </h2>
                   <p className="text-gray-600">{session?.user?.email}</p>
                 </div>
