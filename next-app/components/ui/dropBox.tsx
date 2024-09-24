@@ -58,8 +58,8 @@ export function Dropbox() {
       const url = await getPublicUrl(uploadedFileId);
       console.log(url);
       const response = await axios.post(
-        "https://19f8-49-36-187-204.ngrok-free.app/client/fetch-data-test",
-        { fileUrl: url },
+        "https://19f8-49-36-187-204.ngrok-free.app/client/fetch-data",
+        { fileUrl: url, fileKey :uploadedFileId },
         {
           headers: {
             accept: "application/json",
@@ -67,8 +67,8 @@ export function Dropbox() {
           },
         }
       );
-      if (response.data.status) {
-        await deleteFile(uploadedFileId);
+      if (response.data) {
+        // await deleteFile(uploadedFileId);
       } else {
         console.error("pdf data was not extracted");
       }
