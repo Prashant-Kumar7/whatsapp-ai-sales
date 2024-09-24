@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { EditDialogDemo } from "@/components/ui/editDialogBox";
 import { DeleteDeleteDialogBox } from "@/components/ui/deleteDialogBox";
+import { getProjects, getUserDetails } from "@/app/create/actions";
 
 interface projectinterface {
   id: string;
@@ -36,14 +37,22 @@ interface data {
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const [projects, setProjects] = useState<projectinterface[]>([]);
-
-  const getProjects = async () => {
-    const res = await axios.get("/api/projects/getProjects");
-    setProjects(res.data.projects);
-  };
-
+  const [userDetails, setUserDetails] = useState<any>({});
   useEffect(() => {
-    getProjects();
+    const fetchProjects = async () => {
+      const res = await getProjects();
+      if (res.success) {
+        setProjects(res.success.projects as any);
+      }
+    };
+    const fetchUserDetails = async () => {
+      const res = await getUserDetails();
+      if (res.success) {
+        setUserDetails(res.success.user);
+      }
+    };
+    fetchUserDetails();
+    fetchProjects();
   }, []);
 
   if (status === "unauthenticated") {
@@ -70,7 +79,7 @@ export default function Dashboard() {
                 <div className="flex flex-col items-center mb-8">
                   {session?.user?.image ? (
                     <Image
-                      src={session?.user?.image}
+                      src={userDetails.image}
                       alt="User avatar"
                       width={120}
                       height={120}
@@ -91,21 +100,21 @@ export default function Dashboard() {
                     <BriefcaseIcon className="h-6 w-6 mr-3 text-primary-500" />
                     <span>
                       <strong>Company:</strong>{" "}
-                      {session?.user?.companyName || "Not specified"}
+                      {userDetails.companyName || "Not specified"}
                     </span>
                   </div>
                   <div className="flex items-center text-gray-700">
                     <MapPinIcon className="h-6 w-6 mr-3 text-primary-500" />
                     <span>
                       <strong>Address:</strong>{" "}
-                      {session?.user?.address || "Not specified"}
+                      {userDetails.address || "Not specified"}
                     </span>
                   </div>
                   <div className="flex items-center text-gray-700">
                     <PhoneIcon className="h-6 w-6 mr-3 text-primary-500" />
                     <span>
                       <strong>Phone:</strong>{" "}
-                      {session?.user?.phone || "Not specified"}
+                      {userDetails.phone || "Not specified"}
                     </span>
                   </div>
                 </div>
@@ -125,7 +134,7 @@ export default function Dashboard() {
                     className="h-full text-black shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 flex flex-col"
                   >
                     <CardContent className="p-6 bg-white flex-grow">
-                      <div className="text-sm text-gray-600">
+                      <div className="text-lg text-gray-600">
                         {p.description}
                       </div>
                     </CardContent>
