@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ModeToggle } from "@/components/ui/ModeToggle";
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -88,12 +89,13 @@ export default function Component() {
                   </li>
                 ))}
               </ul>
-              <button
+              {/* <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 transition-colors duration-300 hover:bg-gray-200 dark:hover:bg-gray-700"
               >
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-              </button>
+              </button> */}
+              <ModeToggle/>
             </nav>
             <button
               className="md:hidden text-gray-700 dark:text-gray-300"
