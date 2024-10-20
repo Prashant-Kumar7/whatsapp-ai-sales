@@ -1,14 +1,16 @@
+"use client"
+
 import { Dropbox } from "@/components/ui/dropBox";
 import { NEXT_AUTH_CONFIG } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { Upload, FileText, CheckCircle } from "lucide-react";
 import DownloadableFile from "@/components/ui/DownloadableContent";
 
-export default async function UploadPage() {
-  const session = await getServerSession(NEXT_AUTH_CONFIG);
+export  function UploadPage() {
+//   const session = await getServerSession(NEXT_AUTH_CONFIG);
 
   return (
-    <div className="w-full min-h-screen bg-background p-8 rounded-none md:rounded-tl-2xl">
+    <div className="w-full min-h-screen bg-background p-8 rounded-tl-2xl">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-primary-500 mb-8">
           Upload Your Files
@@ -52,7 +54,7 @@ export default async function UploadPage() {
             />
           </div>
         </div>
-        {session && (
+        {/* {session && (
           <div className="mt-10 p-6 bg-slate-900 rounded-xl shadow-xl border border-slate-700">
             <h2 className="text-xl font-semibold text-primary-500 mb-4">
               Session Info
@@ -61,7 +63,7 @@ export default async function UploadPage() {
               {JSON.stringify(session, null, 2)}
             </pre>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

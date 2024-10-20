@@ -21,6 +21,8 @@ import {
 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ModeToggle } from "@/components/ui/ModeToggle";
+import { MovingBorderDemo } from "@/components/ui/MovingBorderDemo";
 
 export default function Component() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -88,12 +90,13 @@ export default function Component() {
                   </li>
                 ))}
               </ul>
-              <button
+              {/* <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 transition-colors duration-300 hover:bg-gray-200 dark:hover:bg-gray-700"
               >
                 {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-              </button>
+              </button> */}
+              <ModeToggle/>
             </nav>
             <button
               className="md:hidden text-gray-700 dark:text-gray-300"
@@ -223,7 +226,7 @@ export default function Component() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
-                  className="bg-gray-100 dark:bg-gray-800 rounded-xl p-8 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  className="bg-gray-100 dark:bg-gray-800 rounded-xl p-8 shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
                 >
                   <feature.icon className="w-12 h-12 mb-6 text-cyan-600 dark:text-cyan-400" />
                   <h4 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
@@ -239,7 +242,7 @@ export default function Component() {
         </section>
 
         <section id="benefits" className="py-24 bg-gray-50 dark:bg-gray-900">
-          <div className="container mx-auto px-6">
+          {/* <div className="container mx-auto px-6">
             <h3 className="text-3xl font-bold mb-16 text-center bg-clip-text text-transparent bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-400 dark:to-teal-400">
               B2B Benefits
             </h3>
@@ -289,7 +292,8 @@ export default function Component() {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </div> */}
+          <MovingBorderDemo/>
         </section>
 
         <section
@@ -323,14 +327,14 @@ export default function Component() {
               <Input
                 type="text"
                 placeholder="Company Name"
-                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-full focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-500"
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-lg focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-500"
               />
               <Input
                 type="email"
                 placeholder="Business Email"
-                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-full focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-500"
+                className="w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-0 rounded-lg focus:ring-2 focus:ring-cyan-400 dark:focus:ring-cyan-500"
               />
-              <Button className="w-full bg-white dark:bg-gray-800 text-cyan-600 dark:text-cyan-400 hover:bg-gray-100 dark:hover:bg-gray-700 font-semibold px-8 py-4 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+              <Button className="w-full bg-white dark:bg-gray-800 text-cyan-600 dark:text-cyan-400 hover:bg-gray-100 dark:hover:bg-gray-700 font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
                 Request Demo
               </Button>
             </motion.form>

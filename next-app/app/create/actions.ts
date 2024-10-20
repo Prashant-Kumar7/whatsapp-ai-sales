@@ -93,9 +93,6 @@ export async function getParsedData(
       });
 
       console.log(userData);
-      // createData(userData)
-
-      // console.log(typeof(results[0].Phoneno))
     })
     .on("error", (err) => {
       console.error(err);
