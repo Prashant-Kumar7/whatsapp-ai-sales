@@ -45,10 +45,10 @@ export default function Component(
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="shadow-lg rounded-lg overflow-hidden"
+      className="shadow-xl  rounded-lg overflow-hidden"
     >
       <DownloadCard
-        className="w-full max-w-sm bg-primary-100 text-primary-900 overflow-hidden border border-primary-200"
+        className="w-full max-w-sm bg-primary-100 dark:bg-slate-900 text-primary-900 overflow-hidden"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -64,7 +64,7 @@ export default function Component(
             </motion.div>
             <div>
               <motion.h3
-                className="font-semibold text-xl"
+                className="font-semibold dark:text-cyan-600 text-xl"
                 animate={{ x: isHovered ? 5 : 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 10 }}
               >
@@ -94,7 +94,7 @@ export default function Component(
             <motion.a
               href={downloadUrl}
               download={fileName}
-              className="inline-flex items-center justify-center px-4 py-2 border border-primary-500 text-primary-500 rounded-md hover:bg-primary-500 hover:text-white transition-colors"
+              className="inline-flex items-center justify-center px-4 py-2 border border-primary-500 text-primary-500 rounded-md hover:bg-primary-800 hover:text-white transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
